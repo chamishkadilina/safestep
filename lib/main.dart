@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:safestep/pages/artical_page.dart';
 import 'package:safestep/pages/home_page.dart';
+import 'package:safestep/pages/map_page.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -10,8 +12,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: HomePage(),
+    return MaterialApp(
+      home: const HomePage(),
+      debugShowCheckedModeBanner: false,
+      routes: {
+        MapPage.id: (context) => const MapPage(),
+        ArticalPage.id: (context) => const ArticalPage(),
+      },
     );
   }
 }

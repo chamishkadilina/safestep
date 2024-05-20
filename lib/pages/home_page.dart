@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:safestep/pages/artical_page.dart';
+import 'package:safestep/pages/components/banner_tile.dart';
+import 'package:safestep/pages/components/connection_tile.dart';
+import 'package:safestep/pages/components/icon_box_tile.dart';
+import 'package:safestep/pages/map_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -6,6 +11,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -25,34 +31,12 @@ class HomePage extends StatelessWidget {
               const SizedBox(height: 32),
 
               //get location button
-              Container(
-                width: 360,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: Colors.grey.shade300,
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // text
-                      Text(
-                        'Tap to get\nLocation',
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      SizedBox(width: 16),
-                      // icon
-                      Icon(
-                        Icons.location_on,
-                        size: 128,
-                      ),
-                    ],
-                  ),
-                ),
+              BannerTile(
+                onTap: () {
+                  Navigator.pushNamed(context, MapPage.id);
+                },
+                icon: Icons.location_on,
+                text: 'Tap to get\nLocation',
               ),
               const SizedBox(height: 8),
 
@@ -66,90 +50,19 @@ class HomePage extends StatelessWidget {
                 height: 200,
                 child: Row(
                   children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          width: 360,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: Colors.grey.shade300,
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 16.0, vertical: 8),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                // icon
-                                Icon(
-                                  Icons.article_sharp,
-                                  size: 128,
-                                ),
-                                SizedBox(height: 8),
-                                // text
-                                Text(
-                                  'Articals',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
+                    // articals
+                    IconBoxTile(
+                      onTap: () {
+                        Navigator.pushNamed(context, ArticalPage.id);
+                      },
+                      icon: Icons.article_sharp,
+                      text: 'Articals',
                     ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          width: 360,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: Colors.grey.shade300,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16.0, vertical: 8),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                // connection status
-                                const Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    'Connection\nStatus',
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                ),
 
-                                // wifi icon
-                                const Icon(
-                                  Icons.wifi_sharp,
-                                  size: 72,
-                                ),
-                                const SizedBox(height: 8),
-                                // connected indicator
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 24, vertical: 4),
-                                  decoration: BoxDecoration(
-                                    color: Colors.green,
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child: const Text(
-                                    'Connected',
-                                    style: TextStyle(
-                                        fontSize: 18, color: Colors.white),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
+                    // connection Status
+                    const ConnectionTile(
+                      icon: Icons.wifi_sharp,
+                      text: 'Connected',
                     ),
                   ],
                 ),
