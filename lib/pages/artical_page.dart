@@ -8,12 +8,31 @@ class ArticalPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Center(
-        child: Text(
-          'Show Daily Articals',
-          style: TextStyle(
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: BackButton(
+                  style: ButtonStyle(
+                    iconColor: WidgetStatePropertyAll(Colors.white),
+                    backgroundColor: WidgetStatePropertyAll(Colors.blue),
+                  ),
+                ),
+              ),
+              SizedBox(height: 64),
+              Center(
+                child: Text(
+                  'Show Daily Articals',
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

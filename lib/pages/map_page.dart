@@ -8,12 +8,33 @@ class MapPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Center(
-        child: Text(
-          'Show Location on a\nlive map',
-          style: TextStyle(
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              // back Button
+              Align(
+                alignment: Alignment.centerLeft,
+                child: BackButton(
+                  style: ButtonStyle(
+                    iconColor: WidgetStatePropertyAll(Colors.white),
+                    backgroundColor: WidgetStatePropertyAll(Colors.blue),
+                  ),
+                ),
+              ),
+              SizedBox(height: 64),
+
+              Center(
+                child: Text(
+                  'Show Location on a\nlive map',
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
