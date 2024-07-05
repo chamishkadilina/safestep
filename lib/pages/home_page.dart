@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:safestep/pages/map_page.dart';
+import 'package:safestep/pages/google_map_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -97,11 +97,10 @@ class _HomePageState extends State<HomePage> {
                   onTap: () {
                     setState(
                       () {
-                        print('To Go Live map Page');
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const MapPage(),
+                            builder: (context) => const GoogleMapPage(),
                           ),
                         );
                       },
