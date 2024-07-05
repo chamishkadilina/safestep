@@ -1,2 +1,2 @@
 // google Map API Key add here
-String googleMapApiKey = 'Google Map API KEY';
+String googleMapApiKey = ' Add Here Google Map API KEY';

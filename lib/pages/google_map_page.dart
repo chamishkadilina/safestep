@@ -25,45 +25,37 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) async => await initializeMap());
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await initializeMap();
+    });
   }
 
   // is not ideal to call this method diredctly initstate. therefore we create inintiaize map method
   Future<void> initializeMap() async {
     await fetchLocationUpdates();
-    final coordinates = await fetchPolylinePoints();
-    genaratePolylinesFromPoints(coordinates);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: currentPosition == null
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
+          ? const Center(child: CircularProgressIndicator())
           : GoogleMap(
               initialCameraPosition: const CameraPosition(
                 target: googlePlex,
                 zoom: 13,
               ),
               markers: {
-                // current location marker
+                // Current location marker
                 Marker(
                   markerId: const MarkerId('currentLocation'),
                   icon: BitmapDescriptor.defaultMarker,
                   position: currentPosition!,
                 ),
-                // source location marker
+
+                // Destination location marker
                 const Marker(
-                  markerId: MarkerId('sourceLocation'),
-                  icon: BitmapDescriptor.defaultMarker,
-                  position: googlePlex,
-                ),
-                // distination location marker
-                const Marker(
-                  markerId: MarkerId('distination'),
+                  markerId: MarkerId('destination'),
                   icon: BitmapDescriptor.defaultMarker,
                   position: mountainView,
                 ),
@@ -73,18 +65,21 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
     );
   }
 
-  // get user permission and fetch current location
+  // Method to get user permission and fetch the current location
   Future<void> fetchLocationUpdates() async {
     bool servicesEnabled;
     PermissionStatus permissionGranted;
 
-    // get the user permission
+    // Check if location services are enabled
     servicesEnabled = await locationController.serviceEnabled();
-    if (servicesEnabled) {
+    if (!servicesEnabled) {
       servicesEnabled = await locationController.requestService();
-    } else {
-      return;
+      if (!servicesEnabled) {
+        return;
+      }
     }
+
+    // Check and request location permission
     permissionGranted = await locationController.hasPermission();
     if (permissionGranted == PermissionStatus.denied) {
       permissionGranted = await locationController.requestPermission();
@@ -93,9 +88,9 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
       }
     }
 
-    // fetch the current location (listen for location changes)
+    // Listen for location changes and update the current position
     locationController.onLocationChanged.listen(
-      (currentLocation) {
+      (currentLocation) async {
         if (currentLocation.latitude != null &&
             currentLocation.longitude != null) {
           setState(() {
@@ -105,23 +100,32 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
             );
           });
           print(currentPosition);
+
+          // Fetch polyline points after setting the current position
+          if (currentPosition != null) {
+            final coordinates = await fetchPolylinePoints();
+            generatePolylinesFromPoints(coordinates);
+          }
         }
       },
     );
   }
 
-  // fetch polyline points
+  // Method to fetch polyline points between the current location and the destination
   Future<List<LatLng>> fetchPolylinePoints() async {
     final polylinePoints = PolylinePoints();
 
     final result = await polylinePoints.getRouteBetweenCoordinates(
       googleApiKey: googleMapApiKey,
       request: PolylineRequest(
-        origin: PointLatLng(googlePlex.latitude, googlePlex.longitude),
+        origin:
+            PointLatLng(currentPosition!.latitude, currentPosition!.longitude),
         destination: PointLatLng(mountainView.latitude, mountainView.longitude),
         mode: TravelMode.driving,
       ),
     );
+
+    // Return the points if available, otherwise return an empty list
     if (result.points.isNotEmpty) {
       return result.points
           .map((point) => LatLng(point.latitude, point.longitude))
@@ -132,9 +136,8 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
     }
   }
 
-  // genarate polylines from points
-  Future<void> genaratePolylinesFromPoints(
-      List<LatLng> polylineCoordinates) async {
+  // Method to generate polylines from the fetched points
+  void generatePolylinesFromPoints(List<LatLng> polylineCoordinates) {
     const id = PolylineId('polyline');
 
     final polyline = Polyline(
