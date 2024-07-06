@@ -1,6 +1,7 @@
 # SafeStep
 SafeStep is a mobile application designed to ensure the safety and well-being of individuals by allowing real-time location tracking through an integrated Google Maps interface. The app is particularly useful for tracking the live location of blind individuals using an ESP32 with GPS and cellular connectivity.
-![preview](https://github.com/chamishkadilina/safestep/assets/162773906/9b466b95-bf6a-47c8-a236-1d1d04853d15)
+
+![Screenshot 2024-07-06 215432](https://github.com/chamishkadilina/safestep/assets/162773906/2c963fa3-a579-486b-9dbe-1c0d2888aac6)
 ## Features
 - **Real-time Location Tracking:** View the live location of a specific person on Google Maps.
 - **Emergency Alerts:** Send emergency alerts with the current location.
