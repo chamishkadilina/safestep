@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 import 'package:safestep/pages/google_map_page.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -9,6 +11,56 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final locationController = Location();
+  LatLng? currentPosition;
+
+  // fetch the current location at the very begining
+  @override
+  void initState() {
+    super.initState();
+    fetchLocationUpdates();
+  }
+
+  // Method to get user permission and fetch the current location
+  Future<void> fetchLocationUpdates() async {
+    bool servicesEnabled;
+    PermissionStatus permissionGranted;
+
+    // Check if location services are enabled
+    servicesEnabled = await locationController.serviceEnabled();
+    if (!servicesEnabled) {
+      servicesEnabled = await locationController.requestService();
+      if (!servicesEnabled) {
+        return;
+      }
+    }
+
+    // Check and request location permission
+    permissionGranted = await locationController.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await locationController.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    // Listen for location changes and update the current position
+    locationController.onLocationChanged.listen(
+      (currentLocation) async {
+        if (currentLocation.latitude != null &&
+            currentLocation.longitude != null) {
+          setState(() {
+            currentPosition = LatLng(
+              currentLocation.latitude!,
+              currentLocation.longitude!,
+            );
+          });
+          print(currentPosition);
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,7 +152,8 @@ class _HomePageState extends State<HomePage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const GoogleMapPage(),
+                            builder: (context) => GoogleMapPage(
+                                initialPosition: currentPosition!),
                           ),
                         );
                       },
@@ -228,14 +281,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-}
-
-// to run this page
-void main() {
-  runApp(
-    const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomePage(),
-    ),
-  );
 }
