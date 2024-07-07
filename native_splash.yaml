@@ -1,0 +1,13 @@
+flutter_native_splash:
+  android: true  # Enable for Android
+  ios: true  # Enable for iOS
+  web: false  # Disable for Web
+
+  color: "#111111"  # Background color for the splash screen
+  image: assets/icons/ic_app_logo.png  # Path to the splash screen image
+  branding: assets/icons/ic_brand_name.png
+
+  android_12:
+    color: "#111111"  # Background color for the splash screen
+    image: assets/icons/ic_app_logo.png  # Path to the splash screen image
+    branding: assets/icons/ic_brand_name.png
