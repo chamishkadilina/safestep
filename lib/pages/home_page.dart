@@ -61,224 +61,244 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+// HomePage UI Widget Tree
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       body: Stack(
         children: [
-          // background cover image
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/ig_bgmap.jpg'),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                // my safe bar
-                const SizedBox(height: 48),
-                //icon row bar
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // side bar icon (icon 1)
-                    Icon(
-                      Icons.format_list_bulleted,
-                      color: Colors.grey.shade200,
-                      size: 36,
-                    ),
+          // Background Cover Image
+          background(size.height, size.width),
 
-                    // right side util icons
-                    Row(
-                      children: [
-                        // icon 1
-                        Icon(
-                          Icons.shield,
-                          color: Colors.grey.shade200,
-                          size: 36,
-                        ),
-                        const SizedBox(width: 16),
-
-                        // icon 2
-                        Icon(
-                          Icons.edit_notifications_sharp,
-                          color: Colors.grey.shade200,
-                          size: 36,
-                        ),
-                        const SizedBox(width: 16),
-
-                        // share icon (icon 4)
-                        Icon(
-                          Icons.share_rounded,
-                          color: Colors.grey.shade200,
-                          size: 36,
-                        ),
-                        const SizedBox(width: 16),
-
-                        // icon 4
-                        Icon(
-                          Icons.access_alarm_outlined,
-                          color: Colors.grey.shade200,
-                          size: 36,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 64),
-
-                // victim name
-                const Center(
-                  child: Text(
-                    "ADOLF HITLER",
-                    style: TextStyle(
-                      fontSize: 36,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-
-                // to go map circle button. Todo:(bg shaded circles, loading indicate, center map icon)
-                GestureDetector(
-                  onTap: () {
-                    setState(
-                      () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => GoogleMapPage(
-                                initialPosition: currentPosition!),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                  child: Stack(
-                    alignment: Alignment.center,
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  // Top Icons Row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // bg circle with opacity 0.2
-                      Container(
-                        height: 256,
-                        width: 256,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white.withOpacity(0.2),
-                        ),
-                      ),
+                      // Side Bar
+                      sideBar(),
 
-                      // bg circle with opacity 0.4
-                      Container(
-                        height: 208,
-                        width: 208,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white.withOpacity(0.4),
-                        ),
-                      ),
-
-                      // go to map button with icon
-                      Container(
-                        height: 160,
-                        width: 160,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                        ),
-                        child: Image.asset(
-                          'assets/icons/ic_map.png',
-                          scale: 4,
-                        ),
+                      // Side Dummy Icons
+                      Row(
+                        children: [
+                          dummyIcon(icon: Icons.shield),
+                          SizedBox(width: size.width * 0.03),
+                          dummyIcon(icon: Icons.edit_notifications_sharp),
+                          SizedBox(width: size.width * 0.03),
+                          dummyIcon(icon: Icons.share_rounded),
+                          SizedBox(width: size.width * 0.03),
+                          dummyIcon(icon: Icons.access_alarm_outlined),
+                        ],
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(height: 24),
+                  SizedBox(height: size.height * 0.08),
 
-                // connected or disconnetcted indicate text
-                Text(
-                  "CONNECTED",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.blue.shade200,
+                  // Victim Name
+                  victimName(
+                    name: 'jhone cena',
+                    fontSize: 36,
                   ),
-                ),
-                const SizedBox(height: 48),
+                  SizedBox(height: size.height * 0.03),
 
-                // utils bar todo:(victim imformations, get emergency call.. etc upto 4 things)
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        height: 64,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: Colors.white.withOpacity(0.4),
-                        ),
+                  // Circle Map Button
+                  circleMapButton(
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            GoogleMapPage(initialPosition: currentPosition!),
                       ),
                     ),
-                  ],
-                ),
-                const Spacer(),
-
-                // privecy policy
-                Text.rich(
-                  TextSpan(
-                    text: 'By using the app, you agree to our ',
-                    style: TextStyle(
-                      color: Colors.grey.shade200,
-                      // fontSize: 16,
-                    ),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: 'Terms of Service',
-                        style: TextStyle(
-                          color: Colors.grey.shade200,
-                          // fontSize: 16,
-                          decoration: TextDecoration.underline,
-                          fontWeight: FontWeight.bold,
-                          decorationColor: Colors.white,
-                        ),
-                      ),
-                      TextSpan(
-                        text: ' & ',
-                        style: TextStyle(
-                          color: Colors.grey.shade200,
-                          // fontSize: 16,
-                        ),
-                      ),
-                      TextSpan(
-                        text: 'Privacy Policy',
-                        style: TextStyle(
-                          color: Colors.grey.shade200,
-                          // fontSize: 16,
-                          decoration: TextDecoration.underline,
-                          fontWeight: FontWeight.bold,
-                          decorationColor: Colors.white,
-                        ),
-                      ),
-                      TextSpan(
-                        text: '.',
-                        style: TextStyle(
-                          color: Colors.grey.shade200,
-                          // fontSize: 16,
-                        ),
-                      ),
-                    ],
                   ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
+                  SizedBox(height: size.height * 0.03),
+
+                  // Connected or Disconnetcted Text Indicate
+                  textIndicate(fontSize: 24),
+                  SizedBox(height: size.height * 0.03),
+
+                  // Utils Empty Box
+                  utilsBox(height: size.height / 4),
+                  const Spacer(),
+
+                  // privecy policy
+                  privecyPolicy(),
+                ],
+              ),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  // Background Cover Image
+  Widget background(double height_, double widht_) {
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/ig_bgmap.jpg'),
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
+  // Side Bar
+  Widget sideBar() {
+    return Icon(
+      Icons.format_list_bulleted,
+      color: Colors.grey.shade200,
+      size: 36,
+    );
+  }
+
+  // Dummy Icons
+  Widget dummyIcon({IconData? icon}) {
+    return Icon(
+      icon,
+      color: Colors.grey.shade200,
+      size: 36,
+    );
+  }
+
+  // Victim Name
+  Widget victimName({required String name, double? fontSize}) {
+    return Center(
+      child: Text(
+        name.toUpperCase(),
+        style: TextStyle(
+          fontSize: fontSize,
+          fontWeight: FontWeight.w500,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+
+  // Circle map button
+  Widget circleMapButton({Function()? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // bg circle with opacity 0.2
+          Container(
+            height: 256,
+            width: 256,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white.withOpacity(0.2),
+            ),
+          ),
+
+          // bg circle with opacity 0.4
+          Container(
+            height: 208,
+            width: 208,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white.withOpacity(0.4),
+            ),
+          ),
+
+          // go to map button with icon
+          Container(
+            height: 160,
+            width: 160,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white,
+            ),
+            child: Image.asset(
+              'assets/icons/ic_map.png',
+              scale: 4,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Connected or Disconnetcted Text Indicate
+  Widget textIndicate({double? fontSize}) {
+    return Text(
+      "CONNECTED",
+      style: TextStyle(
+        fontSize: fontSize,
+        fontWeight: FontWeight.w600,
+        color: Colors.blue.shade200,
+      ),
+    );
+  }
+
+  // Utils Empty Box
+  Widget utilsBox({double? height}) {
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            height: height,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: Colors.white.withOpacity(0.4),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // privecy policy
+  Widget privecyPolicy() {
+    return Text.rich(
+      TextSpan(
+        text: 'By using the app, you agree to our ',
+        style: TextStyle(
+          color: Colors.grey.shade200,
+        ),
+        children: <TextSpan>[
+          TextSpan(
+            text: 'Terms of Service',
+            style: TextStyle(
+              color: Colors.grey.shade200,
+              decoration: TextDecoration.underline,
+              fontWeight: FontWeight.bold,
+              decorationColor: Colors.white,
+            ),
+          ),
+          TextSpan(
+            text: ' & ',
+            style: TextStyle(
+              color: Colors.grey.shade200,
+              // fontSize: 16,
+            ),
+          ),
+          TextSpan(
+            text: 'Privacy Policy',
+            style: TextStyle(
+              color: Colors.grey.shade200,
+              decoration: TextDecoration.underline,
+              fontWeight: FontWeight.bold,
+              decorationColor: Colors.white,
+            ),
+          ),
+          TextSpan(
+            text: '.',
+            style: TextStyle(
+              color: Colors.grey.shade200,
+              // fontSize: 16,
+            ),
+          ),
+        ],
+      ),
+      textAlign: TextAlign.center,
     );
   }
 }
